@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    @yield('javascript')
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,6 +19,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="css/layout.css">
 </head>
 <body>
     <div id="app">
@@ -78,25 +80,31 @@
         <main class="p-4">
             <div class="row">
              <div class="col-md-2">
+                <div class="card-body my-card-body">
+                    <a class="d-block" href="/">Show All</a>
                  @foreach($tags as $tag)
-                 <a class="d-block" href="/home/{{$tag['name']}}">{{$tag['name']}}</a>
+                 <a class="d-block" href="/?tag={{$tag['id']}}">{{$tag['name']}}</a>
                  @endforeach
+                </div>
              </div>
+
              <div class="col-md-6">
-                @foreach($posts as $post)
-                <div class="card mb-1">
-                    <div class="card-body">
-                      <p class="card-text">
-                        {{$post['content']}}
-                     </p>
-                      <a href="#" class="btn btn-primary">reply...</a>
-                      <span>  posted by {{$post['username']}} at {{$post['updated_at']}} </span>
-                      @if($post['user_id']===\Auth::id())
-                        <a href="/edit/{{$post['id']}}">edit..</a>
-                      @endif
-                    </div>
-                  </div>
-                  @endforeach
+                 <div class="my-card-body overflow-auto">
+                    @foreach($posts as $post)
+                    <div class="card mb-1" >
+                        <div class="card-body">
+                          <p class="card-text  text-truncate">
+                            {{$post['content']}}
+                         </p>
+                          <a href="#" class="btn btn-primary">reply...</a>
+                          <span>  posted by {{$post['username']}} at {{$post['updated_at']}} </span>
+                          @if($post['user_id']===\Auth::id())
+                            <a href="/edit/{{$post['id']}}">edit..</a>
+                          @endif
+                        </div>
+                      </div>
+                      @endforeach
+                 </div>
              </div>
              <div class="col-md-4">
                 @yield('content')

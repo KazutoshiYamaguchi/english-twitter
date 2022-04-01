@@ -8,4 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+
+    public function getPosts(){
+        $query_tag = \Request::query('tag');
+        $query = Post::query()->select('posts.*','name as username')
+        ->leftjoin('users','users.id','=','posts.user_id')
+        ->whereNull('deleted_at')
+        ->orderBy('updated_at', 'DESC');
+
+        if(!empty($query_tag)){
+            $query->leftjoin('post_tags','posts.id','=','post_tags.post_id')
+            ->where('post_tags.tag_id','=',$query_tag);
+        }
+
+        $posts = $query->get();
+
+        return $posts;
+    }
 }

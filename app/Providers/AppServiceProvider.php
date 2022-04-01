@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Post;
+use App\Models\Tag;
+use App\Models\PostTag;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +26,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        view()->composer('*',function($view){
+
+        $posts_model = new Post();
+        $posts = $posts_model->getPosts();
+
+        $tags_model = new Tag();
+        $tags = $tags_model->getTags();
+
+        $view->with('posts',$posts)->with('tags',$tags);
+
+        });
     }
 }

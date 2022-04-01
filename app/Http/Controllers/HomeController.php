@@ -27,23 +27,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $posts = Post::select('posts.*','name as username')
-        ->leftjoin('users','users.id','=','posts.user_id')
-        ->whereNull('deleted_at')
-        ->orderby('updated_at','desc')
-        ->get();
-
-        $tags=Tag::select('tags.*')
-        ->whereNull('deleted_at')
-        ->orderby('id','asc')
-        ->get();
-
-        return view('create',compact('posts','tags'));
+        return view('create');
     }
 
     public function store(Request $request)
     {
         $posts=$request->all();
+        $request->validate(['content'=>'required']);
 
         DB::transaction(function () use($posts) {
             $post_id=Post::insertGetId(['content' => $posts['content'],'user_id'=> \Auth::id()]);
@@ -60,16 +50,6 @@ class HomeController extends Controller
 
     public function edit($id)
     {
-        $posts = Post::select('posts.*','name as username')
-        ->leftjoin('users','users.id','=','posts.user_id')
-        ->whereNull('deleted_at')
-        ->orderby('updated_at','desc')
-        ->get();
-
-        $tags=Tag::select('tags.*')
-        ->whereNull('deleted_at')
-        ->orderby('id','asc')
-        ->get();
 
         $edit_post = Post::select('posts.*', 'tags.id AS tag_id')
             ->leftJoin('post_tags', 'post_tags.post_id', '=', 'posts.id')
@@ -78,23 +58,31 @@ class HomeController extends Controller
             ->where('posts.id', '=', $id)
             ->whereNull('posts.deleted_at')
             ->get();
-            
 
         $included_tags=[];
         foreach($edit_post as $post){
             array_push($included_tags,$post['tag_id']);
         }
 
-        return view('edit',compact('posts','tags','edit_post','included_tags'));
+        return view('edit',compact('edit_post','included_tags'));
     }
 
     public function update(Request $request)
     {
         $posts=$request->all();
+        $request->validate(['content'=>'required']);
 
         Post::where('id','=',$posts['post_id'])
         ->update(['content' => $posts['content']]);
+
+        PostTag::where('post_id','=',$posts['post_id'])->delete();
         
+        if(!empty($posts['tags'][0])){
+            foreach($posts['tags'] as $tag){
+                PostTag::insert(['post_id' => $posts['post_id'], 'tag_id' => $tag]);
+            }
+        }
+
         return redirect(route('home'));
     }
 
