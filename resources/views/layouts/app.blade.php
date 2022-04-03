@@ -11,6 +11,18 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+crossorigin="anonymous"></script>
+<!-- popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+crossorigin="anonymous"></script>
+<!-- bootstrap.js -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+crossorigin="anonymous"></script>
     @yield('javascript')
 
     <!-- Fonts -->
@@ -19,7 +31,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="css/layout.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+    
 </head>
 <body>
     <div id="app">
@@ -31,6 +45,18 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                {{-- hashtags --}}
+                <div class="dropdown my-dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      #Hashtags
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="/">Show All</a>
+                        @foreach($tags as $tag)
+                        <a class="dropdown-item" href="/?tag={{$tag['id']}}">{{$tag['name']}}</a>
+                         @endforeach
+                    </div>
+                  </div>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
@@ -79,34 +105,35 @@
 
         <main class="p-4">
             <div class="row">
-             <div class="col-md-2">
-                <div class="card-body my-card-body">
-                    <a class="d-block" href="/">Show All</a>
-                 @foreach($tags as $tag)
-                 <a class="d-block" href="/?tag={{$tag['id']}}">{{$tag['name']}}</a>
-                 @endforeach
-                </div>
-             </div>
-
-             <div class="col-md-6">
-                 <div class="my-card-body overflow-auto">
-                    @foreach($posts as $post)
-                    <div class="card mb-1" >
-                        <div class="card-body">
-                          <p class="card-text  text-truncate">
-                            {{$post['content']}}
-                         </p>
-                          <a href="#" class="btn btn-primary">reply...</a>
-                          <span>  posted by {{$post['username']}} at {{$post['updated_at']}} </span>
-                          @if($post['user_id']===\Auth::id())
-                            <a href="/edit/{{$post['id']}}">edit..</a>
-                          @endif
+                    <div class="col-sm-12 col-md-2 tags">
+                        <div class="card-body my-card-body">
+                            <a class="d-block" href="/">Show All</a>
+                         @foreach($tags as $tag)
+                         <a class="d-block" href="/?tag={{$tag['id']}}">{{$tag['name']}}</a>
+                         @endforeach
                         </div>
-                      </div>
-                      @endforeach
-                 </div>
-             </div>
-             <div class="col-md-4">
+                     </div>
+                
+                    <div class="col-sm-12 col-md-6 overflow-auto">
+                        <div class="my-card-body">
+                           @foreach($posts as $post)
+                           <div class="card mb-1" >
+                               <div class="card-body">
+                                 <p class="card-text  text-truncate">
+                                   {{$post['content']}}
+                                </p>
+                                 <a href="#" class="btn btn-primary">reply...</a>
+                                 <span>  posted by {{$post['username']}} at {{$post['updated_at']}} </span>
+                                 @if($post['user_id']===\Auth::id())
+                                   <a href="/edit/{{$post['id']}}">edit..</a>
+                                 @endif
+                               </div>
+                             </div>
+                             @endforeach
+                        </div>
+                    </div>
+            
+             <div class="col-sm-12 col-md-4">
                 @yield('content')
              </div>
             </div>

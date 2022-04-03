@@ -1,6 +1,10 @@
 .my-card-body {
     height: calc(100vh - (55px + 48px));
 }
+
+.my-dropdown {
+    display: none;
+}
 /* ellipseを当てると1行になる */
 .elipsis {
     overflow: hidden;
@@ -13,5 +17,11 @@
     .my-card-body {
         height: auto;
         max-height: 50vh;
+    }
+    .my-dropdown {
+        display: flex;
+    }
+    .tags {
+        display: none;
     }
 }
