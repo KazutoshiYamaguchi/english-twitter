@@ -6,15 +6,20 @@
 
 @section('content')
 <div class='card my-card-body p-3'>
+    <form class="form-group d-flex justify-content-end pb-1 pr-1" id='delete-form' action='{{route('destroy')}}' method="post">
+        @csrf
+        <input type="hidden" name='post_id' value='{{$edit_post[0]['id']}}'>
+        <i data-toggle="tooltip" data-placement="top" title="Delete this post?" type="button" class="fas fa-trash" style="color: #cc2e12" onclick="deleteHandle(event)"></i>
+    </form>
     <form class="form-group" action='{{route('update')}}' method="post">
         @csrf
         <input type="hidden" name='post_id' value='{{$edit_post[0]['id']}}'>
-        <textarea class="form-control mb-3" name='content' placeholder="edit here.." rows="3">{{$edit_post[0]['content']}}</textarea>
+        <textarea class="form-control mb-3" name='content' placeholder="edit here.." rows="3" autofocus>{{$edit_post[0]['content']}}</textarea>
         @error('content')
         <div class="alert alert-danger">Oops! Enter your wonderful tweet.</div>
         @enderror
 
-        <p class="text-secondary">Add hashtags?</p>
+        <span class="text-secondary">Add hashtags?</span>
         @foreach($tags as $tag)
           <div class="form-check form-check-inline mb-3">
             <input class="form-check-input" type="checkbox" name="tags[]" 
@@ -24,14 +29,7 @@
         @endforeach
 
         <button type="submit" class="btn btn-primary">edit</button>
-    </form>
-    
-    <form class="form-group" id='delete-form' action='{{route('destroy')}}' method="post">
-        @csrf
-        <input type="hidden" name='post_id' value='{{$edit_post[0]['id']}}'>
-        <button class="btn btn-danger" onclick="deleteHandle(event)">delete</button>
-    </form>
-    
+        </form>
 </div>
 
 @endsection

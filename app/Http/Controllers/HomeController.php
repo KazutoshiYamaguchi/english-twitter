@@ -88,10 +88,11 @@ class HomeController extends Controller
 
     public function destroy(Request $request)
     {
-        $posts=$request->all();
+        $posts = $request->all();
 
         Post::where('id','=',$posts['post_id'])
         ->update(['deleted_at' => date('Y-m-d H:i:s',time())]);
+        
         
         return redirect(route('home'));
     }

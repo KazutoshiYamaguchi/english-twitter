@@ -11,6 +11,8 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    @yield('javascript')
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
     <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
 integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -23,7 +25,7 @@ crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
 integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
 crossorigin="anonymous"></script>
-    @yield('javascript')
+    
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -54,7 +56,7 @@ crossorigin="anonymous"></script>
                         <a class="dropdown-item" href="/">Show All</a>
                         @foreach($tags as $tag)
                         <a class="dropdown-item" href="/?tag={{$tag['id']}}">{{$tag['name']}}</a>
-                         @endforeach
+                        @endforeach
                     </div>
                   </div>
 
@@ -115,19 +117,25 @@ crossorigin="anonymous"></script>
                      </div>
                 
                     <div class="col-sm-12 col-md-6 overflow-auto">
+                        
                         <div class="my-card-body">
-                           @foreach($posts as $post)
-                           <div class="card mb-1" >
-                               <div class="card-body">
-                                 <p class="card-text  text-truncate">
+                            @foreach($posts as $post)
+                           <div class="card mb-1">
+                                <div class="card-body">
+                                {{-- 投稿内容 --}}
+                                <p class="card-text text-truncate">
                                    {{$post['content']}}
                                 </p>
-                                 <a href="#" class="btn btn-primary">reply...</a>
-                                 <span>  posted by {{$post['username']}} at {{$post['updated_at']}} </span>
-                                 @if($post['user_id']===\Auth::id())
-                                   <a href="/edit/{{$post['id']}}">edit..</a>
-                                 @endif
-                               </div>
+
+                                {{-- ユーザー名　投稿日 --}}
+                                <i data-toggle="tooltip" data-placement="top" title="Reply to this post?" type="button" class="fas fa-reply"></i>
+                                <span>  posted by {{$post['username']}} at {{$post['updated_at']}} </span>
+                                
+                                {{-- 編集ボタン --}}
+                                @if($post['user_id']===\Auth::id())
+                                <a href="/edit/{{$post['id']}}"><i data-toggle="tooltip" data-placement="top" title="Edit this post?" type="button" class="fas fa-pen"></i></a>
+                                @endif
+                                </div>
                              </div>
                              @endforeach
                         </div>
