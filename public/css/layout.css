@@ -1,10 +1,15 @@
 .my-card-body {
     height: calc(100vh - (55px + 48px));
 }
+.replies {
+    height: auto;
+    max-height: 30vh;
+}
 
 .my-dropdown {
     display: none;
 }
+
 /* ellipseを当てると1行になる */
 .elipsis {
     overflow: hidden;

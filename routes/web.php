@@ -24,5 +24,7 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::post('/store', [HomeController::class, 'store'])->name('store');
 Route::get('/edit/{id}', [HomeController::class, 'edit'])->name('edit');
+Route::get('/reply/{id}', [HomeController::class, 'reply'])->name('reply');
 Route::post('/update', [HomeController::class, 'update'])->name('update');
 Route::post('/destroy', [HomeController::class, 'destroy'])->name('destroy');
+Route::post('/storeReplies', [HomeController::class, 'storeReplies'])->name('storeReplies');

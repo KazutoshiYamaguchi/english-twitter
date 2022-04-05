@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    @yield('javascript')
+    
     <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
     <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -107,44 +107,54 @@ crossorigin="anonymous"></script>
 
         <main class="p-4">
             <div class="row">
-                    <div class="col-sm-12 col-md-2 tags">
-                        <div class="card-body my-card-body">
-                            <a class="d-block" href="/">Show All</a>
-                         @foreach($tags as $tag)
-                         <a class="d-block" href="/?tag={{$tag['id']}}">{{$tag['name']}}</a>
-                         @endforeach
-                        </div>
-                     </div>
-                
+                <div class="col-sm-12 col-md-3">
+                </div>
                     <div class="col-sm-12 col-md-6 overflow-auto">
-                        
-                        <div class="my-card-body">
-                            @foreach($posts as $post)
-                            <a href="/reply/{{$post['id']}}">
-                           <div class="card mb-1">
+                            <a href="{{route('home')}}"><i class="fas fa-arrow-left"></i></a>
+                            <div class="card mb-1">
                                 <div class="card-body">
+                                    <p><strong>{{$reply_post[0]['username']}}</strong></p>
                                 {{-- 投稿内容 --}}
-                                <p class="card-text text-truncate">
-                                   {{$post['content']}}
+                                <p class="card-text">
+                                   {{$reply_post[0]['content']}} 
                                 </p>
-
                                 {{-- ユーザー名　投稿日 --}}
-                                <a href="/reply/{{$post['id']}}"><i data-toggle="tooltip" data-placement="top" title="Reply to this post?" type="button" class="fas fa-reply"></i></a>
-                                <span>  posted by {{$post['username']}} at {{$post['updated_at']}} </span>
-                                
-                                {{-- 編集ボタン --}}
-                                @if($post['user_id']===\Auth::id())
-                                <a href="/edit/{{$post['id']}}"><i data-toggle="tooltip" data-placement="top" title="Edit this post?" type="button" class="fas fa-pen"></i></a>
-                                @endif
+                                <span>  posted at {{$reply_post[0]['updated_at']}} </span>
                                 </div>
                              </div>
-                             </a>
-                             @endforeach
-                        </div>
+                             <div class="card">
+                                <form class="form-group" action='{{route('storeReplies')}}' method='post'>
+                                    @csrf
+                                    <input type="hidden" name='post_id' value='{{$reply_post[0]['id']}}'>
+                                    <textarea class="form-control mb-3" name='content' placeholder="Tweet your reply" rows=""></textarea>
+                                    @error('content')
+                                    <div class="alert alert-danger">Oops! Enter your reply.</div>
+                                    @enderror
+                                    <div class="dropdown-divider"></div>
+                                    <div class="d-flex justify-content-end p-2">  
+                                    <button type="submit" class="btn btn-primary">Reply</button>
+                                    </div>    
+                                </form>
+                            </div>
+                            <div class="my-card-body replies">
+                                @foreach($replies as $reply)
+                                <div class="card mb-1">
+                                    <div class="card-body">
+                                        <p><strong>{{$reply['username']}}</strong></p>
+                                    {{-- 投稿内容 --}}
+                                    <p class="card-text">
+                                       {{$reply['reply_content']}} 
+                                    </p>
+                                    {{-- ユーザー名　投稿日 --}}
+                                    <span>replied at {{$reply['updated_at']}} </span>
+                                    </div>
+                                 </div>
+                                 @endforeach
+                            </div>
                     </div>
             
-             <div class="col-sm-12 col-md-4">
-                @yield('content')
+             <div class="col-sm-12 col-md-3 ">
+                
              </div>
             </div>
             

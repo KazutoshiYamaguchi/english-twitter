@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\PostTag;
+use App\Models\Reply;
 
 class HomeController extends Controller
 {
@@ -67,6 +68,37 @@ class HomeController extends Controller
         return view('edit',compact('edit_post','included_tags'));
     }
 
+    public function reply($id)
+    {
+        $reply_post = Post::select('posts.*','name as username')
+            ->leftjoin('users','users.id','=','posts.user_id')
+            ->where('posts.id', '=', $id)
+            ->whereNull('posts.deleted_at')
+            ->get();
+        
+        $replies = Reply::select('replies.*','name as username')
+        ->leftjoin('users','users.id','=','replies.user_id')
+        ->where('replies.post_id', '=', $id)
+        ->orderby('replies.updated_at','desc')
+        ->whereNull('replies.deleted_at')
+        ->get();
+
+        return view('reply',compact('reply_post','replies'));
+    }
+
+    public function storeReplies(Request $request)
+    {
+        $posts = $request->all();
+        $request->validate(['content'=>'required']);
+        $post_id = $posts['post_id'];
+
+        DB::transaction(function () use($posts) {
+            Reply::insert(['reply_content' => $posts['content'],'post_id'=>$posts['post_id'],'user_id'=> \Auth::id()]);
+        });
+ 
+        return redirect(route('reply',$post_id));
+    }
+
     public function update(Request $request)
     {
         $posts=$request->all();
@@ -96,4 +128,6 @@ class HomeController extends Controller
         
         return redirect(route('home'));
     }
+    
+    
 }
