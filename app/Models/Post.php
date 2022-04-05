@@ -11,10 +11,10 @@ class Post extends Model
 
     public function getPosts(){
         $query_tag = \Request::query('tag');
-        $query = Post::query()->select('posts.*','name as username')
+        $query = Post::query()->select('posts.*','users.name as username')
         ->leftjoin('users','users.id','=','posts.user_id')
-        ->whereNull('deleted_at')
-        ->orderBy('updated_at', 'DESC');
+        ->whereNull('posts.deleted_at')
+        ->orderBy('posts.updated_at', 'DESC');
 
         if(!empty($query_tag)){
             $query->leftjoin('post_tags','posts.id','=','post_tags.post_id')
@@ -22,7 +22,10 @@ class Post extends Model
         }
 
         $posts = $query->get();
+        
 
         return $posts;
     }
+
+    
 }

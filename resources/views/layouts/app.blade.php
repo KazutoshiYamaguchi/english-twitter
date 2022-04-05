@@ -117,7 +117,11 @@ crossorigin="anonymous"></script>
                      </div>
                 
                     <div class="col-sm-12 col-md-6 overflow-auto">
-                        
+                        @if(isset($selectedTag))
+                        <p>{{$selectedTag[0]['name']}}</p>
+                        @else
+                        <p>Show All</p>
+                        @endif
                         <div class="my-card-body">
                             @foreach($posts as $post)
                             <a href="/reply/{{$post['id']}}">
@@ -137,6 +141,7 @@ crossorigin="anonymous"></script>
                                 <a href="/edit/{{$post['id']}}"><i data-toggle="tooltip" data-placement="top" title="Edit this post?" type="button" class="fas fa-pen"></i></a>
                                 @endif
                                 </div>
+                                {{-- {{dd($post)}} --}}
                              </div>
                              </a>
                              @endforeach

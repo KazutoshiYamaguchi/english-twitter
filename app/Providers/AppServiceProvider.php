@@ -33,8 +33,9 @@ class AppServiceProvider extends ServiceProvider
 
         $tags_model = new Tag();
         $tags = $tags_model->getTags();
+        $selectedTag = $tags_model->getSelectedTag();
 
-        $view->with('posts',$posts)->with('tags',$tags);
+        $view->with('posts',$posts)->with('tags',$tags)->with('selectedTag',$selectedTag);
 
         });
     }
