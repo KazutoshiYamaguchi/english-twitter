@@ -31,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
 
         Schema::defaultStringLength(191);
         
+        
         view()->composer('*',function($view){
 
         $posts_model = new Post();
