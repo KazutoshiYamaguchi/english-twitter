@@ -28,3 +28,4 @@ Route::get('/reply/{id}', [HomeController::class, 'reply'])->name('reply');
 Route::post('/update', [HomeController::class, 'update'])->name('update');
 Route::post('/destroy', [HomeController::class, 'destroy'])->name('destroy');
 Route::post('/storeReplies', [HomeController::class, 'storeReplies'])->name('storeReplies');
+Route::post('/replyDestroy', [HomeController::class, 'replyDestroy'])->name('replyDestroy');

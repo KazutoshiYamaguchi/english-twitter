@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card my-card-body p-3">
-    <form class="form-group" action='{{route('store')}}' method="post">
+    <form class="form-group validate-error" action='{{route('store')}}' method="post">
         @csrf
         <textarea class="form-control mb-3" name='content' placeholder="Share your great experience" rows="5"></textarea>
         @error('content')
@@ -21,7 +21,7 @@
         <div class="d-flex justify-content-end pb-2 pr-1">
             <button type="submit" class="btn btn-primary">tweet</button>
         </div>
-        
     </form>
 </div>
+
 @endsection

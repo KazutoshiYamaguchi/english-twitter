@@ -25,7 +25,7 @@ crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
 integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
 crossorigin="anonymous"></script>
-    
+  
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -35,14 +35,15 @@ crossorigin="anonymous"></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/css/layout.css">
-    
+    {{-- toastr --}}
+    @toastr_css
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                <a class="navbar-brand text-success" href="{{ url('/') }}">
+                    <strong>{{ config('app.name', 'Laravel') }}</strong>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -134,14 +135,13 @@ crossorigin="anonymous"></script>
 
                                 {{-- ユーザー名　投稿日 --}}
                                 <a href="/reply/{{$post['id']}}"><i data-toggle="tooltip" data-placement="top" title="Reply to this post?" type="button" class="fas fa-reply"></i></a>
-                                <span>  posted by {{$post['username']}} at {{$post['updated_at']}} </span>
+                                <span class="text-secondary">  posted by {{$post['username']}} at {{$post['updated_at']}} </span>
                                 
                                 {{-- 編集ボタン --}}
                                 @if($post['user_id']===\Auth::id())
                                 <a href="/edit/{{$post['id']}}"><i data-toggle="tooltip" data-placement="top" title="Edit this post?" type="button" class="fas fa-pen"></i></a>
                                 @endif
                                 </div>
-                                {{-- {{dd($post)}} --}}
                              </div>
                              </a>
                              @endforeach
@@ -156,4 +156,7 @@ crossorigin="anonymous"></script>
         </main>
     </div>
 </body>
+@jquery
+@toastr_js
+@toastr_render
 </html>

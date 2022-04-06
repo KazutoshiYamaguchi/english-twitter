@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="/js/confirm.js"></script>
     
     <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
     <!-- jQuery -->
@@ -35,14 +36,15 @@ crossorigin="anonymous"></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/css/layout.css">
-    
+    {{-- toastr --}}
+    @toastr_css
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                <a class="navbar-brand text-success" href="{{ url('/') }}">
+                    <strong>{{ config('app.name', 'Laravel') }}</strong>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -111,15 +113,15 @@ crossorigin="anonymous"></script>
                 </div>
                     <div class="col-sm-12 col-md-6 overflow-auto">
                             <a href="{{route('home')}}"><i class="fas fa-arrow-left"></i></a>
-                            <div class="card mb-1">
+                            <div class="card border-primary mb-1">
                                 <div class="card-body">
-                                    <p><strong>{{$reply_post[0]['username']}}</strong></p>
+                                    <p class="text-primary"><strong>{{$reply_post[0]['username']}}</strong></p>
                                 {{-- 投稿内容 --}}
                                 <p class="card-text">
                                    {{$reply_post[0]['content']}} 
                                 </p>
                                 {{-- ユーザー名　投稿日 --}}
-                                <span>  posted at {{$reply_post[0]['updated_at']}} </span>
+                                <span class="text-secondary">  posted at {{$reply_post[0]['updated_at']}} </span>
                                 </div>
                              </div>
                              <div class="card">
@@ -137,17 +139,27 @@ crossorigin="anonymous"></script>
                                 </form>
                             </div>
                             <div class="my-card-body replies">
-                                @foreach($replies as $reply)
+                                @foreach($replies as $key => $reply)
                                 <div class="card mb-1">
                                     <div class="card-body">
-                                        <p><strong>{{$reply['username']}}</strong></p>
+                                        <p class="text-primary"><strong>{{$reply['username']}}</strong></p>
                                     {{-- 投稿内容 --}}
                                     <p class="card-text">
                                        {{$reply['reply_content']}} 
                                     </p>
+                                    <span class="text-secondary">replied at {{$reply['updated_at']}} </span>
                                     {{-- ユーザー名　投稿日 --}}
-                                    <span>replied at {{$reply['updated_at']}} </span>
+                                    
+                                    @if($reply['user_id']===\Auth::id())
+                                    <form class="form-group d-flex justify-content-end" id='delete-form{{$reply['id']}}' action='{{route('replyDestroy')}}' method="POST">
+                                        @csrf
+                                        <input type="hidden" name='post_id' value='{{$reply['post_id']}}'>
+                                        <input type="hidden" name='reply_id' value='{{$reply['id']}}'>
+                                        <i data-toggle="tooltip" data-placement="top" title="Delete this reply?" type="button" class="fas fa-trash" style="color: #cc2e12" onclick="deleteReply(event,{{$reply['id']}})"></i>
+                                    </form>
+                                    @endif
                                     </div>
+                                    
                                  </div>
                                  @endforeach
                             </div>
@@ -161,4 +173,7 @@ crossorigin="anonymous"></script>
         </main>
     </div>
 </body>
+@jquery
+@toastr_js
+@toastr_render
 </html>

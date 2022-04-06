@@ -44,6 +44,7 @@ class HomeController extends Controller
                     PostTag::insert(['post_id' => $post_id, 'tag_id' => $tag]);
                 }
             }
+            toastr()->success('Tweeted successfully!');
         });
  
         return redirect(route('home'));
@@ -94,6 +95,8 @@ class HomeController extends Controller
 
         DB::transaction(function () use($posts) {
             Reply::insert(['reply_content' => $posts['content'],'post_id'=>$posts['post_id'],'user_id'=> \Auth::id()]);
+
+            toastr()->success('Your reply was sent!');
         });
  
         return redirect(route('reply',$post_id));
@@ -114,6 +117,7 @@ class HomeController extends Controller
                 PostTag::insert(['post_id' => $posts['post_id'], 'tag_id' => $tag]);
             }
         }
+        toastr()->success('Your tweet was changed!');
 
         return redirect(route('home'));
     }
@@ -124,9 +128,27 @@ class HomeController extends Controller
 
         Post::where('id','=',$posts['post_id'])
         ->update(['deleted_at' => date('Y-m-d H:i:s',time())]);
+
+        toastr()->success('Your tweet was deleted!');
         
         
         return redirect(route('home'));
+    }
+
+    public function replyDestroy(Request $request)
+    {
+        
+        $posts = $request->all();
+    
+        $post_id = $posts['post_id'];
+        $reply_id = $posts['reply_id'];
+
+        Reply::where('id','=',$posts['reply_id'])
+        ->update(['deleted_at' => date('Y-m-d H:i:s',time())]);
+
+        toastr()->success('Your reply was deleted!');
+        
+        return redirect(route('reply',$post_id));
     }
     
     
