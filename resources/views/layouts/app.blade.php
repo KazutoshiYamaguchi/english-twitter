@@ -56,7 +56,7 @@ crossorigin="anonymous"></script>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="/">Show All</a>
                         @foreach($tags as $tag)
-                        <a class="dropdown-item" href="/?tag={{$tag['id']}}">{{$tag['name']}}</a>
+                        <a class="dropdown-item" href="/?tag={{$tag['id']}}">#{{$tag['name']}}</a>
                         @endforeach
                     </div>
                   </div>
@@ -112,7 +112,7 @@ crossorigin="anonymous"></script>
                         <div class="card-body my-card-body">
                             <a class="d-block" href="/">Show All</a>
                          @foreach($tags as $tag)
-                         <a class="d-block" href="/?tag={{$tag['id']}}">{{$tag['name']}}</a>
+                         <a class="d-block" href="/?tag={{$tag['id']}}">#{{$tag['name']}}</a>
                          @endforeach
                         </div>
                      </div>
