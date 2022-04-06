@@ -38,5 +38,9 @@ class AppServiceProvider extends ServiceProvider
         $view->with('posts',$posts)->with('tags',$tags)->with('selectedTag',$selectedTag);
 
         });
+
+        if (App::environment(['production'])) {
+            URL::forceScheme('https');
+        }
     }
 }
